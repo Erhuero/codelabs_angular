@@ -6,8 +6,8 @@ export enum Equipements {
 export interface Room {
     id: number,
     capacity: string, 
+    telephone: string,
     accessibility: boolean,
     equipements: Equipements[],
-    address: string,
-    telephone: string
+    address: string
 }

@@ -9,8 +9,8 @@ import { RouterModule } from '@angular/router';
     standalone: true,
     template: `
     <main>
-        <app-navbar></app-navbar>
-        <router-outlet></router-outlet>
+      <app-navbar></app-navbar>
+      <router-outlet></router-outlet>
     </main>
     `,
     styleUrl: './app.component.scss',

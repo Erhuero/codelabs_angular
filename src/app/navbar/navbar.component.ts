@@ -9,7 +9,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
   imports: [MatToolbarModule, MatButtonModule, MatIconModule],
   template: `
     <mat-toolbar>
-      <span>Réservation des locaux</span>
+      <span>Réservations des locaux</span>
       <span class="example-spacer"></span>
     </mat-toolbar>
   `,
