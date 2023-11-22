@@ -1,27 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from "./navbar/navbar.component";
-import { TitreComponent } from "./titre/titre.component";
+import { RoomItemComponent } from "./room-item/room-item.component";
+import { RouterModule } from '@angular/router';
 
 @Component({
     selector: 'app-root',
     standalone: true,
     template: `
-   <main>
-      <header class="navbar">
+    <main>
         <app-navbar></app-navbar>
-      </header>
-    <section class="content">
-      <div>
-        <app-titre></app-titre>
-      </div>
-    </section>
-</main>
-  `,
+        <router-outlet></router-outlet>
+    </main>
+    `,
     styleUrl: './app.component.scss',
-    imports: [CommonModule, RouterOutlet, NavbarComponent, TitreComponent]
+    imports: [CommonModule, NavbarComponent, RoomItemComponent, RouterModule], 
 })
+
 export class AppComponent {
-  title = 'codelabs_angular';
 }
