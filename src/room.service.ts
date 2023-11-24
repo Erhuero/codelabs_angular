@@ -1,12 +1,13 @@
 // room.service.ts
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Room, Equipements } from './room';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RoomService {
-  private rooms: Room[] = [
+  private roomsSource = new BehaviorSubject<Room[]>([
     {
         id: 1,
         capacity: '50',
@@ -31,33 +32,36 @@ export class RoomService {
         address: '789 Maple Ave, Yourtown',
         telephone: '345-678-9012'
       }
-  ];
+    ]);
+    rooms$ = this.roomsSource.asObservable();
 
   constructor() {}
 
-  getRooms(): Room[] {
-    return this.rooms;
-  }
-// affiche salle par IdD
-getRoomById(id: number): Room | undefined {
-    return this.rooms.find(room => room.id === id);
+  getRooms(): Observable<Room[]> {
+    return this.rooms$;
   }
 
   // Ajoute une nouvelle salle
   addRoom(room: Room): void {
-    this.rooms.push(room);
+    const currentRooms = this.roomsSource.getValue();
+    this.roomsSource.next([...currentRooms, room]);
   }
 
   // Mise à jour une salle existante
-  updateRoom(room: Room): void {
-    const index = this.rooms.findIndex(r => r.id === room.id);
+  updateRoom(updatedRoom: Room): void {
+    const rooms = this.roomsSource.getValue();
+    const index = rooms.findIndex(room => room.id === updatedRoom.id);
     if (index !== -1) {
-      this.rooms[index] = room;
+      rooms[index] = updatedRoom;
+      this.roomsSource.next([...rooms]);
     }
   }
+//retourner un observable de room (gagne de temps)
+//creer le routing avec un menu
 
   // Supprime une salle
   deleteRoom(id: number): void {
-    this.rooms = this.rooms.filter(room => room.id !== id);
+    const rooms = this.roomsSource.getValue().filter(room => room.id !== id);
+    this.roomsSource.next(rooms);
   }
 }

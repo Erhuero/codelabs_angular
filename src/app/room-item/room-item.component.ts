@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Room } from '../../../room';
+import { Room } from '../../room';
 
 @Component({
   selector: 'app-room-item',
