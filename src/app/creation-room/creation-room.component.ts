@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { getEquipmentIcon, getAccessibilityIcon, Equipements } from '../../room';
+import { getEquipmentIcon, getAccessibilityIcon, Equipments } from '../../room';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
@@ -51,7 +51,7 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./creation-room.component.scss']
 })
 export class CreationRoomComponent {
-  equipements = [Equipements.TABLE, Equipements.VISIO]; // Exemple d'équipements disponibles
+  equipements = [Equipments.TABLE, Equipments.VISIO]; // Exemple d'équipements disponibles
   accessibility = true; // Exemple d'état d'accessibilité
 
   getEquipmentIcon = getEquipmentIcon;

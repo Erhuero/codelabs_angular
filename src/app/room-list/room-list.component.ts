@@ -46,10 +46,10 @@ import { RouterModule } from '@angular/router';
           </td>
       </ng-container>
 
-      <ng-container matColumnDef="equipements">
+      <ng-container matColumnDef="equipments">
       <th mat-header-cell *matHeaderCellDef class="action-cell"> Équipements </th>
-        <td mat-cell *matCellDef="let room" >
-          <mat-icon *ngFor="let equipment of room.equipements">{{ getEquipmentIcon(equipment) }}</mat-icon>
+        <td mat-cell *matCellDef="let room">
+          <mat-icon *ngFor="let equipment of room.equipments">{{ getEquipmentIcon(equipment) }}</mat-icon>
         </td>
       </ng-container>
 
@@ -74,7 +74,7 @@ import { RouterModule } from '@angular/router';
 })
 
 export class RoomListComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'address', 'telephone', 'capacity', 'accessibility', 'equipements', 'actions'];
+  displayedColumns: string[] = ['id', 'address', 'telephone', 'capacity', 'accessibility', 'equipments', 'actions'];
   rooms: Room[] = [];
 
   constructor(private roomService: RoomService) {}
@@ -89,7 +89,7 @@ export class RoomListComponent implements OnInit {
   editRoom(room: Room) {
     // Logique pour l'édition d'une salle
     // Par exemple, naviguer vers un formulaire de modification avec l'ID de la salle
-    // this.router.navigate(['/room-edit', room.id]);
+    //this.router.navigate(['/room-edit', room.id]);
   }
 
   async deleteRoom(id: number) {

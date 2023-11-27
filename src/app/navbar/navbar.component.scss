@@ -1,3 +1,9 @@
 .example-spacer {
     flex: 1 1 auto;
   }
+
+  mat-toolbar {
+    background-color: #3f51b5; // Changez cette couleur selon vos besoins
+    color: white; // Changez la couleur du texte si nécessaire
+  }
+  

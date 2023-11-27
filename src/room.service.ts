@@ -1,21 +1,21 @@
 // room.service.ts
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, catchError, map, shareReplay, throwError } from 'rxjs';
-import { Room, Equipements } from './room';
+import { Room, Equipments } from './room';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RoomService {
 
-  private apiUrl = 'http://localhost:3000/rooms';
+  private apiUrl = '/api/rooms';
 
    // Gestion des erreurs
    private handleError(error: HttpErrorResponse) {
-    // Vous pouvez traiter l'erreur en fonction de son statut ou de son contenu
     let errorMessage = 'Une erreur inconnue s\'est produite!';
-    if (error.error instanceof ErrorEvent) {
+    if (error.error && typeof error.error.message === 'string') {
       // Erreur côté client
       errorMessage = `Erreur: ${error.error.message}`;
     } else {
@@ -25,22 +25,22 @@ export class RoomService {
     console.error(errorMessage);
     return throwError(errorMessage);
   }
+  
 
   constructor(private http: HttpClient) {}
   
   getRooms(): Observable<Room[]> {
-    return this.http.get<Room[]>(this.apiUrl)
-      .pipe(
-        catchError(this.handleError),
-        shareReplay(1) // Cache la dernière valeur pour les souscriptions ultérieures
-      );
+    return this.http.get<Room[]>(this.apiUrl).pipe(
+      tap(data => console.log('Data from API:', data)), // Imprime les données reçues de l'API
+      catchError(this.handleError),
+      shareReplay(1) // Cache la dernière valeur pour les souscriptions ultérieures
+    );
   }
   
   // Ajoute une nouvelle salle
 
   addRoom(room: Room): Observable<Room> {
-    return this.http.post<Room>(this.apiUrl, room)
-      .pipe(catchError(this.handleError));
+    return this.http.post<Room>(this.apiUrl, room).pipe(catchError(this.handleError));
   }
 
   updateRoom(updatedRoom: Room): Observable<Room> {
@@ -58,7 +58,4 @@ export class RoomService {
         catchError(this.handleError)
       );
   }
-  
-
-
 }

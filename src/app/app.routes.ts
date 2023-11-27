@@ -1,7 +1,8 @@
-import { Routes } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 import { RoomListComponent } from './room-list/room-list.component';
 import { CreationRoomComponent } from './creation-room/creation-room.component';
+import { NgModule } from '@angular/core';
 
 export const routes: Routes = [
     {
@@ -23,4 +24,8 @@ export const routes: Routes = [
 //faire du lazy loading
 
 
-export default routes;
+@NgModule({
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule]
+  })
+  export class AppRoutingModule { }

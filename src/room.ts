@@ -1,11 +1,11 @@
-export enum Equipements {
-    TABLE ,
+export enum Equipments {
+    TABLE,
     VISIO
   }
 
   export const EQUIPMENT_ICONS = {
-    [Equipements.TABLE]: 'desktop',
-    [Equipements.VISIO]: 'tv',
+    [Equipments.TABLE]: 'desktop',
+    [Equipments.VISIO]: 'tv',
   };
 
 export interface Room {
@@ -13,12 +13,13 @@ export interface Room {
     capacity: string, 
     telephone: string,
     accessibility: boolean,
-    equipements: Equipements[],
+    equipments: Equipments[],
     address: string
 }
 
-export function getEquipmentIcon(equipment: Equipements): string {
-  return EQUIPMENT_ICONS[equipment];
+export function getEquipmentIcon(equipment: string): string {
+  const equipmentEnum = Equipments[equipment as keyof typeof Equipments];
+  return EQUIPMENT_ICONS[equipmentEnum];
 }
 
 export function getAccessibilityIcon(accessibility: boolean): string {
