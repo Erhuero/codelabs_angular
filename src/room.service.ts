@@ -1,67 +1,64 @@
 // room.service.ts
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, map, shareReplay, throwError } from 'rxjs';
 import { Room, Equipements } from './room';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RoomService {
-  private roomsSource = new BehaviorSubject<Room[]>([
-    {
-        id: 1,
-        capacity: '50',
-        accessibility: true,
-        equipements: [Equipements.TABLE, Equipements.VISIO],
-        address: '123 Main St, Anytown',
-        telephone: '123-456-7890'
-    },
-    {
-        id: 2,
-        capacity: '100',
-        accessibility: false,
-        equipements: [Equipements.TABLE],
-        address: '456 Elm St, Sometown',
-        telephone: '234-567-8901'
-      },
-      {
-        id: 3,
-        capacity: '200',
-        accessibility: true,
-        equipements: [Equipements.VISIO],
-        address: '789 Maple Ave, Yourtown',
-        telephone: '345-678-9012'
-      }
-    ]);
-    rooms$ = this.roomsSource.asObservable();
 
-  constructor() {}
+  private apiUrl = 'http://localhost:3000/rooms';
 
-  getRooms(): Observable<Room[]> {
-    return this.rooms$;
-  }
-
-  // Ajoute une nouvelle salle
-  addRoom(room: Room): void {
-    const currentRooms = this.roomsSource.getValue();
-    this.roomsSource.next([...currentRooms, room]);
-  }
-
-  // Mise à jour une salle existante
-  updateRoom(updatedRoom: Room): void {
-    const rooms = this.roomsSource.getValue();
-    const index = rooms.findIndex(room => room.id === updatedRoom.id);
-    if (index !== -1) {
-      rooms[index] = updatedRoom;
-      this.roomsSource.next([...rooms]);
+   // Gestion des erreurs
+   private handleError(error: HttpErrorResponse) {
+    // Vous pouvez traiter l'erreur en fonction de son statut ou de son contenu
+    let errorMessage = 'Une erreur inconnue s\'est produite!';
+    if (error.error instanceof ErrorEvent) {
+      // Erreur côté client
+      errorMessage = `Erreur: ${error.error.message}`;
+    } else {
+      // Erreur côté serveur
+      errorMessage = `Statut: ${error.status}\nMessage: ${error.message}`;
     }
+    console.error(errorMessage);
+    return throwError(errorMessage);
+  }
+
+  constructor(private http: HttpClient) {}
+  
+  getRooms(): Observable<Room[]> {
+    return this.http.get<Room[]>(this.apiUrl)
+      .pipe(
+        catchError(this.handleError),
+        shareReplay(1) // Cache la dernière valeur pour les souscriptions ultérieures
+      );
+  }
+  
+  // Ajoute une nouvelle salle
+
+  addRoom(room: Room): Observable<Room> {
+    return this.http.post<Room>(this.apiUrl, room)
+      .pipe(catchError(this.handleError));
+  }
+
+  updateRoom(updatedRoom: Room): Observable<Room> {
+    return this.http.put<Room>(`${this.apiUrl}/${updatedRoom.id}`, updatedRoom)
+      .pipe(catchError(this.handleError));
   }
 //retourner un observable de room (gagne de temps)
 //creer le routing avec un menu
 
   // Supprime une salle
-  deleteRoom(id: number): void {
-    const rooms = this.roomsSource.getValue().filter(room => room.id !== id);
-    this.roomsSource.next(rooms);
+  deleteRoom(id: number): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}`)
+      .pipe(
+        map(() => ({ message: 'Salle supprimée avec succès.' })),
+        catchError(this.handleError)
+      );
   }
+  
+
+
 }

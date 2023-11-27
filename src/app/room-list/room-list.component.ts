@@ -13,6 +13,11 @@ import { RouterModule } from '@angular/router';
   imports: [MatTableModule, MatIconModule, CommonModule, RouterModule],
   template: `
   <h2>Administration des salles</h2>
+  
+  <button mat-fab color="primary" [routerLink]="['/room/create']" class="fab-button">
+      <mat-icon>add</mat-icon>
+    </button>
+
     <table mat-table [dataSource]="rooms" class="mat-elevation-z8">
     <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef> No. </th>
@@ -64,25 +69,21 @@ import { RouterModule } from '@angular/router';
       <tr mat-row *matRowDef="let room; columns: displayedColumns;"></tr>
     </table>
 
-   
-    <button mat-fab color="primary" [routerLink]="['/room/create']" class="fab-button">
-      <mat-icon>add</mat-icon>
-    </button>
-
   `,
   styleUrl: './room-list.component.scss'
 })
 
 export class RoomListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'address', 'telephone', 'capacity', 'accessibility', 'equipements', 'actions'];
-  rooms: Room[] = []; // Initialisation avec un tableau vide
+  rooms: Room[] = [];
 
   constructor(private roomService: RoomService) {}
 
   ngOnInit() {
-    this.roomService.getRooms().subscribe(rooms => {
-      this.rooms = rooms;
-    })
+    this.roomService.getRooms().subscribe(
+      rooms => this.rooms = rooms,
+      error => console.error(error)
+    );
   }
 
   editRoom(room: Room) {
@@ -91,15 +92,14 @@ export class RoomListComponent implements OnInit {
     // this.router.navigate(['/room-edit', room.id]);
   }
 
-  deleteRoom(id: number) {
+  async deleteRoom(id: number) {
     if (confirm('Êtes-vous sûr de vouloir supprimer cette salle ?')) {
       this.roomService.deleteRoom(id);
-      this.roomService.getRooms().subscribe(rooms => {
+      (await this.roomService.getRooms()).subscribe(rooms => {
         this.rooms = rooms; // Mettre à jour la liste après la suppression
       });
     }
   }
-  
 
   getEquipmentIcon = getEquipmentIcon;
   getAccessibilityIcon = getAccessibilityIcon;

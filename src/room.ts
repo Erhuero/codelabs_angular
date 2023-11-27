@@ -8,7 +8,6 @@ export enum Equipements {
     [Equipements.VISIO]: 'tv',
   };
 
-
 export interface Room {
     id: number,
     capacity: string, 

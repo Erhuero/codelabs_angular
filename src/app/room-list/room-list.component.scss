@@ -13,12 +13,6 @@ margin-right: 8px;
 
 .fab-button {
   position: absolute;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  bottom: 35%; /* La hauteur du bouton plus 20% de l'espace supplémentaire */
-  right: 5%;
-  z-index: 100;
-  background-color: palevioletred; /* Couleur de fond saumon */
-  color: white; /* Couleur du texte, choisissez une couleur qui contraste bien avec le saumon */
+  top: 10px;
+  right: 10px;
 }
