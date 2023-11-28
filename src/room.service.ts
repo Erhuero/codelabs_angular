@@ -1,9 +1,10 @@
 // room.service.ts
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, catchError, map, shareReplay, throwError } from 'rxjs';
-import { Room, Equipments } from './room';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
+import { Inject, Injectable } from '@angular/core';
+import { Observable, catchError, map, shareReplay, throwError } from 'rxjs';
+import { Room } from './room';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { DOCUMENT } from '@angular/common';
+import { LoginService } from './login.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,16 +27,23 @@ export class RoomService {
     return throwError(errorMessage);
   }
   
-
-  constructor(private http: HttpClient) {}
-  
-  getRooms(): Observable<Room[]> {
-    return this.http.get<Room[]>(this.apiUrl).pipe(
-      tap(data => console.log('Data from API:', data)), // Imprime les données reçues de l'API
-      catchError(this.handleError),
-      shareReplay(1) // Cache la dernière valeur pour les souscriptions ultérieures
-    );
+  constructor(private http: HttpClient, private loginService: LoginService) {
+    
   }
+
+  getRooms(): Observable<Room[]> {
+    //console.log("Window", window)
+    // Récupérer le token du stockage local
+    const token = this.loginService.token;
+    // Créer les en-têtes HTTP avec le token
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    // Passer les en-têtes à la requête GET
+    return this.http.get<Room[]>(this.apiUrl, { headers });
+  }
+
   
   // Ajoute une nouvelle salle
 

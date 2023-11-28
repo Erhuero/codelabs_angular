@@ -25,3 +25,10 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+Dans Angular 17 et versions ultérieures, la configuration globale de l'application a évolué, notamment avec l'introduction des configurations ApplicationConfig et des fonctions provide*. 
+
+Pour configurer un intercepteur HTTP global, il faut l'ajouter à la configuration de l'application en utilisant provideHttpClient.
+
+Information sur les intercepteurs de token de connexion
+https://blog.ninja-squad.com/2022/11/09/angular-http-in-standalone-applications/

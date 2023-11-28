@@ -14,7 +14,7 @@ import { RouterModule } from '@angular/router';
   template: `
   <h2>Administration des salles</h2>
   
-  <button mat-fab color="primary" [routerLink]="['/room/create']" class="fab-button">
+  <button mat-fab color="primary" [routerLink]="['/admin/room/create']" class="fab-button">
       <mat-icon>add</mat-icon>
     </button>
 

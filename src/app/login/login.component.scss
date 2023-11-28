@@ -1,0 +1,41 @@
+/* login.component.scss */
+body {
+    display: flex;
+    justify-content: center; /* Centre horizontalement */
+    align-items: center; /* Centre verticalement */
+    height: 100vh;
+    margin: 0;
+    background: linear-gradient(to right, #2193b0, #2193b0); /* Dégradé subtil */
+  }
+  
+  .form-container {
+    background: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: auto; /* Garde le conteneur centré */
+    max-width: 300px; /* Largeur maximale du formulaire */
+  }
+  
+  input[type="email"], input[type="password"] {
+    width: calc(100% - 20px); /* Ajustement pour le padding */
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+  }
+  
+  button {
+    width: calc(100% - 20px); /* Ajustement pour le padding */
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #2193b0;
+    color: white;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #6dd5ed;
+  }
+  
