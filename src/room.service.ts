@@ -1,9 +1,8 @@
 // room.service.ts
 import { Inject, Injectable } from '@angular/core';
-import { Observable, catchError, map, shareReplay, throwError } from 'rxjs';
+import { Observable, catchError, map, throwError } from 'rxjs';
 import { Room } from './room';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { DOCUMENT } from '@angular/common';
 import { LoginService } from './login.service';
 
 @Injectable({
@@ -44,11 +43,14 @@ export class RoomService {
     return this.http.get<Room[]>(this.apiUrl, { headers });
   }
 
-  
   // Ajoute une nouvelle salle
-
   addRoom(room: Room): Observable<Room> {
-    return this.http.post<Room>(this.apiUrl, room).pipe(catchError(this.handleError));
+    const token = this.loginService.token;
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    return this.http.post<Room>(this.apiUrl, room, { headers }).pipe(catchError(this.handleError));
   }
 
   updateRoom(updatedRoom: Room): Observable<Room> {

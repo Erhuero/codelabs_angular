@@ -32,3 +32,8 @@ Pour configurer un intercepteur HTTP global, il faut l'ajouter à la configurati
 
 Information sur les intercepteurs de token de connexion
 https://blog.ninja-squad.com/2022/11/09/angular-http-in-standalone-applications/
+
+https://stackoverflow.com/questions/73530018/add-http-interceptor-to-standalone-component
+
+https://www.angularjswiki.com/angular/cant-bind-to-ngmodel-since-it-isnt-a-known-property-of-input/
+

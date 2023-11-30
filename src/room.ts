@@ -13,7 +13,7 @@ export interface Room {
     capacity: string, 
     telephone: string,
     accessibility: boolean,
-    equipments: Equipments[],
+    equipments: string[],
     address: string
 }
 

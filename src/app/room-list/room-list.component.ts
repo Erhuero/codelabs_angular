@@ -54,7 +54,7 @@ import { RouterModule } from '@angular/router';
       </ng-container>
 
       <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef > Actions </th>
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
         <td mat-cell *matCellDef="let room" class="action-cell">
             <button mat-icon-button (click)="editRoom(room)" style="margin-right: 8px;">
               <mat-icon>edit</mat-icon> 
