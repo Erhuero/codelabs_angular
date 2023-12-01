@@ -9,9 +9,14 @@ import { RouterModule } from '@angular/router';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-room-list',
-  standalone: true,
-  imports: [MatTableModule, MatIconModule, CommonModule, RouterModule],
+  selector: 'app-room-list', // Définit le sélecteur personnalisé pour utiliser ce composant dans d'autres templates HTML.
+  standalone: true,         // Indique que le composant est autonome (standalone) et peut être utilisé sans être déclaré dans un module.
+  imports: [                // Liste des modules nécessaires pour ce composant.
+    MatTableModule,         // Importe MatTableModule pour l'utilisation de tables Material Design.
+    MatIconModule,          // Importe MatIconModule pour l'utilisation d'icônes Material Design.
+    CommonModule,           // Importe CommonModule qui offre les directives Angular courantes comme ngIf, ngFor.
+    RouterModule           // Importe RouterModule pour utiliser les fonctionnalités de routage comme routerLink.
+  ],
   template: `
   <h2>Administration des salles</h2>
   
@@ -74,36 +79,45 @@ import { Router } from '@angular/router';
 })
 
 export class RoomListComponent implements OnInit {
+  // Définit les colonnes à afficher dans le tableau des salles
   displayedColumns: string[] = ['id', 'address', 'telephone', 'capacity', 'accessibility', 'equipments', 'actions'];
+  // Stocke la liste des salles récupérées depuis l'API
   rooms: Room[] = [];
 
+  // Injecte RoomService pour la gestion des salles et Router pour la navigation
   constructor(private roomService: RoomService, private router: Router) {}
 
+  // Charge les salles au démarrage du composant
   ngOnInit() {
+    // Appelle getRooms de RoomService et met à jour la liste des salles
     this.roomService.getRooms().subscribe(
-      rooms => this.rooms = rooms,
-      error => console.error(error)
+      rooms => this.rooms = rooms, // Stocke les salles dans la variable rooms
+      error => console.error(error)  // Affiche les erreurs en console
     );
   }
 
+  // Méthode pour éditer une salle spécifique
   editRoom(room: Room) {
-    // Logique pour l'édition d'une salle
-    // Par exemple, naviguer vers un formulaire de modification avec l'ID de la salle
+    // Navigue vers la page de modification de la salle avec l'ID de la salle
     this.router.navigate(['/admin/room', room.id]);
   }
 
+  // Méthode pour supprimer une salle spécifique
   async deleteRoom(id: number) {
+    // Demande une confirmation avant la suppression
     if (confirm('Êtes-vous sûr de vouloir supprimer cette salle ?')) {
+      // Appelle deleteRoom de RoomService pour supprimer la salle
       this.roomService.deleteRoom(id).subscribe(async () => {
+        // Recharge la liste des salles après la suppression
         (await this.roomService.getRooms()).subscribe(rooms => {
-          this.rooms = rooms;
+          this.rooms = rooms; // Met à jour la liste des salles
         });
       });
     }
   }
   
-
+  // Méthodes pour obtenir les icônes d'équipement et d'accessibilité
   getEquipmentIcon = getEquipmentIcon;
   getAccessibilityIcon = getAccessibilityIcon;
- 
 }
+

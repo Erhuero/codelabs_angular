@@ -32,9 +32,9 @@ import { FormsModule } from '@angular/forms';
         
         <div class="form-field">
           <label for="accessibility">Accessible Handicapé ?</label>
-          <input id="accessibility" type="checkbox"/>
+          <input id="accessibility" type="checkbox" [(ngModel)]="room.accessibility" [ngModelOptions]="{standalone: true}">
         </div>
-        
+
         <div class="form-field equipment-checkboxes">
           <label>Équipements:</label>
           <div *ngFor="let equipment of equipements; let i = index" class="equipment-checkbox">
