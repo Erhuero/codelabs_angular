@@ -1,0 +1,93 @@
+.creation-room-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
+    h2 {
+      margin-bottom: 20px;
+    }
+  }
+  
+  .form-field {
+    margin-bottom: 15px;
+    
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    
+    input[type="text"],
+    input[type="number"],
+    input[type="telephone"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    
+    input[type="checkbox"] {
+      margin-top: 5px;
+    }
+  }
+  
+  .form-actions {
+    margin-top: 20px;
+    
+    .cancel-button,
+    .submit-button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .cancel-button {
+      background-color: #ccc;
+      margin-right: 10px;
+    }
+    
+    .submit-button {
+      background-color: #007bff;
+      color: white;
+    }
+  }
+
+  .equipment-checkbox {
+    display: flex;
+    align-items: center; /* Alignement vertical des éléments */
+    gap: 10px; /* Espace entre la case à cocher et l'icône */
+  }
+  
+  mat-icon {
+    padding: 0;
+    font-size: 24px; /* taille souhaitée pour les icônes */
+  }
+  
+  /* Style pour la case à cocher */
+  input[type="checkbox"] {
+    margin: 0;
+    width: 20px;
+    height: 20px;
+  }
+   
+  .equipment-checkbox mat-icon {
+    margin-top: 12px;
+   
+  }
+  
+  .checkbox-label-container {
+    display: flex;
+    align-items: center; /* Alignement vertical des éléments */
+    gap: 8px; /* Espace entre le libellé et la case à cocher */
+  }
+  
+  /* Style pour le libellé à côté de la case à cocher */
+  .checkbox-label-container label {
+    margin-bottom: 0; /* Enlever la marge inférieure pour aligner avec la case à cocher */
+    margin-top: 5px;
+  }
+
+  .checkbox-label-container input[type="checkbox"] {
+    order: -1; /* Place la case à cocher avant le libellé dans l'ordre d'affichage */
+  }

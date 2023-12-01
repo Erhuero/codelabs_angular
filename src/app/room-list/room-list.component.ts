@@ -6,6 +6,7 @@ import { RoomService } from '../../room.service';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-room-list',
@@ -56,19 +57,18 @@ import { RouterModule } from '@angular/router';
       <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef> Actions </th>
         <td mat-cell *matCellDef="let room" class="action-cell">
-            <button mat-icon-button (click)="editRoom(room)" style="margin-right: 8px;">
-              <mat-icon>edit</mat-icon> 
-            </button>
-            <button mat-icon-button (click)="deleteRoom(room.id)">
-              <mat-icon>delete</mat-icon>
+          <button mat-icon-button (click)="editRoom(room)" style="margin-right: 8px;">
+            <mat-icon>edit</mat-icon> 
           </button>
+          <button mat-icon-button (click)="deleteRoom(room.id)">
+            <mat-icon>delete</mat-icon>
+        </button>
         </td>
       </ng-container>
      
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let room; columns: displayedColumns;"></tr>
     </table>
-
   `,
   styleUrl: './room-list.component.scss'
 })
@@ -77,7 +77,7 @@ export class RoomListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'address', 'telephone', 'capacity', 'accessibility', 'equipments', 'actions'];
   rooms: Room[] = [];
 
-  constructor(private roomService: RoomService) {}
+  constructor(private roomService: RoomService, private router: Router) {}
 
   ngOnInit() {
     this.roomService.getRooms().subscribe(
@@ -89,17 +89,19 @@ export class RoomListComponent implements OnInit {
   editRoom(room: Room) {
     // Logique pour l'édition d'une salle
     // Par exemple, naviguer vers un formulaire de modification avec l'ID de la salle
-    //this.router.navigate(['/room-edit', room.id]);
+    this.router.navigate(['/admin/room', room.id]);
   }
 
   async deleteRoom(id: number) {
     if (confirm('Êtes-vous sûr de vouloir supprimer cette salle ?')) {
-      this.roomService.deleteRoom(id);
-      (await this.roomService.getRooms()).subscribe(rooms => {
-        this.rooms = rooms; // Mettre à jour la liste après la suppression
+      this.roomService.deleteRoom(id).subscribe(async () => {
+        (await this.roomService.getRooms()).subscribe(rooms => {
+          this.rooms = rooms;
+        });
       });
     }
   }
+  
 
   getEquipmentIcon = getEquipmentIcon;
   getAccessibilityIcon = getAccessibilityIcon;

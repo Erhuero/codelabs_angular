@@ -50,22 +50,41 @@ export class RoomService {
       Authorization: `Bearer ${token}`
     });
 
-    return this.http.post<Room>(this.apiUrl, room, { headers }).pipe(catchError(this.handleError));
+    return this.http.post<Room>(this.apiUrl, room, { headers }).pipe(catchError(this.handleError)
+    );
   }
 
-  updateRoom(updatedRoom: Room): Observable<Room> {
-    return this.http.put<Room>(`${this.apiUrl}/${updatedRoom.id}`, updatedRoom)
-      .pipe(catchError(this.handleError));
+  // Ajoute une nouvelle salle
+  modifyRoom(room: Room): Observable<Room> {
+    const token = this.loginService.token;
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    return this.http.put<Room>(`${this.apiUrl}/${room.id}`, room, { headers }).pipe(catchError(this.handleError)
+    );
   }
-//retourner un observable de room (gagne de temps)
-//creer le routing avec un menu
+
+  getRoomById(id: number): Observable<Room> {
+    const token = this.loginService.token;
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+    return this.http.get<Room>(`${this.apiUrl}/${id}`, { headers }).pipe(catchError(this.handleError)
+    );
+  }
+
+  //retourner un observable de room (gagne de temps)
+  //creer le routing avec un menu
 
   // Supprime une salle
   deleteRoom(id: number): Observable<{ message: string }> {
-    return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}`)
-      .pipe(
-        map(() => ({ message: 'Salle supprimée avec succès.' })),
-        catchError(this.handleError)
+    const token = this.loginService.token;
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+    return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}`, { headers })
+      .pipe(map(() => ({ message: 'Salle supprimée avec succès.' })),catchError(this.handleError)
       );
   }
 }

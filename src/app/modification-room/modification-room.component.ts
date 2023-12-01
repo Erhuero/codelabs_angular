@@ -1,24 +1,19 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { getEquipmentIcon, getAccessibilityIcon, Equipments, Room } from '../../room';
-import { MatTableModule } from '@angular/material/table';
+import { Equipments, Room, getAccessibilityIcon, getEquipmentIcon } from '../../room';
+import { EquipmentWithState } from '../creation-room/creation-room.component';
+import { RoomService } from '../../room.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
-import { RoomService } from '../../room.service';
-
-export interface EquipmentWithState {
-  type: Equipments;
-  selected: boolean;
-}
 
 @Component({
-  selector: 'app-creation-room',
+  selector: 'app-modification-room',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatIconModule, FormsModule],
+  imports: [CommonModule, MatIconModule, FormsModule],
   template: `
     <div class="creation-room-container">
-      <h2>Créer une nouvelle salle</h2>
+      <h2>Modifier la salle</h2>
       <form (ngSubmit)="onSubmit()">
         <div class="form-field">
           <label for="address">Adresse</label>
@@ -37,14 +32,13 @@ export interface EquipmentWithState {
         
         <div class="form-field">
           <label for="accessibility">Accessible Handicapé ?</label>
-          <input id="accessibility" type="checkbox" [(ngModel)]="room.accessibility" [ngModelOptions]="{standalone: true}"/>
+          <input id="accessibility" type="checkbox"/>
         </div>
         
         <div class="form-field equipment-checkboxes">
           <label>Équipements:</label>
           <div *ngFor="let equipment of equipements; let i = index" class="equipment-checkbox">
-          <input type="checkbox" [id]="'equipment' + i" [(ngModel)]="equipment.selected" [name]="'equipment' + i" [ngModelOptions]="{standalone: true}">
-
+          <input type="checkbox" [id]="'equipment' + i" [(ngModel)]="equipment.selected" [ngModelOptions]="{standalone: true}">
             <label [for]="'equipment' + i">
               <mat-icon>{{ getIcon(equipment.type) }}</mat-icon>
             </label>
@@ -58,11 +52,10 @@ export interface EquipmentWithState {
       </form>
     </div>
   `,
-  styleUrl: './creation-room.component.scss'
+  styleUrl: './modification-room.component.scss'
 })
+export class ModificationRoomComponent {
 
-export class CreationRoomComponent {
- 
   room: Omit<Room, 'id'> = { // 'Omit' exclut 'id' de l'interface 'Room'
     address: '',
     capacity: '',
@@ -79,18 +72,38 @@ export class CreationRoomComponent {
 
     constructor(
       private roomService: RoomService,
-      private router: Router) {}
-
-
+      private router: Router,
+      private route: ActivatedRoute // Injectez ActivatedRoute
+    ) {}
+  
+    ngOnInit() {
+      const roomId = this.route.snapshot.paramMap.get('id');
+      if (roomId) {
+        this.roomService.getRoomById(+roomId).subscribe(
+          room => {
+            this.room = room; 
+            // Pré-cocher les cases d'équipement
+            this.room.equipments.forEach((equipmentName) => {
+              const equipment = this.equipements.find(e => Equipments[e.type] === equipmentName);
+              if (equipment) {
+                equipment.selected = true;
+              }
+            });
+          },
+          error => console.error(error)
+        );
+      }
+    }
+    
     onSubmit() {
       this.room.equipments = this.equipements
       .filter(equipment => equipment.selected)
       .map(equipment => Equipments[equipment.type]);
   
       // Appel à RoomService pour enregistrer la salle
-      this.roomService.addRoom(this.room as Room).subscribe({
+      this.roomService.modifyRoom(this.room as Room).subscribe({
         next: (room) => {
-          const userConfirmed = window.confirm('Enregistrement réussi ! Cliquez sur OK pour revenir a la liste des salles');
+          const userConfirmed = window.confirm('Modification réussie ! Cliquez sur OK pour revenir a la liste des salles');
           if(userConfirmed){
             this.router.navigate(['/admin/room']);
           }
@@ -115,4 +128,5 @@ export class CreationRoomComponent {
       // Utilisez la fonction existante getEquipmentIcon avec la conversion nécessaire
       return getEquipmentIcon(Equipments[equipment]);
     }
+
 }
