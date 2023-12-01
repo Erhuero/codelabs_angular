@@ -31,8 +31,10 @@ import { FormsModule } from '@angular/forms';
         </div>
         
         <div class="form-field">
-          <label for="accessibility">Accessible Handicapé ?</label>
-          <input id="accessibility" type="checkbox" [(ngModel)]="room.accessibility" [ngModelOptions]="{standalone: true}">
+          <div class="checkbox-label-container">
+            <input id="accessibility" type="checkbox" [(ngModel)]="room.accessibility" [ngModelOptions]="{standalone: true}">
+            <label for="accessibility">Accessible Handicapé ?</label>
+          </div>
         </div>
 
         <div class="form-field equipment-checkboxes">

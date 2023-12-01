@@ -36,8 +36,10 @@ export interface EquipmentWithState {
         </div>
         
         <div class="form-field">
+        <div class="checkbox-label-container">
           <label for="accessibility">Accessible Handicapé ?</label>
           <input id="accessibility" type="checkbox" [(ngModel)]="room.accessibility" [ngModelOptions]="{standalone: true}"/>
+          </div>
         </div>
         
         <div class="form-field equipment-checkboxes">
