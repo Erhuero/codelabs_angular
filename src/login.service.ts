@@ -16,6 +16,13 @@ export class LoginService {
 
     token = ''; // Variable pour stocker le token JWT
 
+    getUserName() {
+        if (typeof window !== 'undefined' && window.localStorage) {
+          return localStorage.getItem('email') ?? 'Utilisateur';
+        }
+        return 'Utilisateur';
+      }      
+
     // Constructeur avec injection du service HttpClient pour effectuer des requêtes HTTP
     constructor(private http: HttpClient) { }
 
@@ -25,6 +32,8 @@ export class LoginService {
         return this.http.post<LoginData>(this.apiUrl, { email, password }).pipe(map(
             (data) => {
                 this.token = data.token; // Stockage du token JWT dans la variable
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('email', email); // Stockez l'email dans localStorage
                 // Utiliser localStorage.setItem('token', data.token); pour le stocker de manière persistante
                 return data; // Retourne les données de réponse
             })
