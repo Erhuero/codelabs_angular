@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatToolbarModule} from '@angular/material/toolbar';
-import { LoginService } from '../../login.service';
+import { LoginService } from '../services/login.service';
 
 @Component({
   selector: 'app-navbar',
@@ -11,8 +11,10 @@ import { LoginService } from '../../login.service';
   template: `
     <mat-toolbar>
       <span>Réservations des locaux</span>
+        <div class="welcome-container">
+          <span>Bienvenue : {{ userName }}</span>
+        </div>
       <span class="example-spacer"></span>
-      <h2>Bienvenue : {{ userName }}</h2>
     </mat-toolbar>
   `,
   styleUrl: './navbar.component.scss'

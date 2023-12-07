@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Equipments, Room, getAccessibilityIcon, getEquipmentIcon } from '../../room';
 import { EquipmentWithState } from '../creation-room/creation-room.component';
-import { RoomService } from '../../room.service';
+import { RoomService } from '../services/room.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
@@ -107,7 +107,7 @@ export class ModificationRoomComponent {
         next: (room) => {
           const userConfirmed = window.confirm('Modification réussie ! Cliquez sur OK pour revenir a la liste des salles');
           if(userConfirmed){
-            this.router.navigate(['/admin/room']);
+            this.router.navigate(['/room']);
           }
         },
         error: (error) => {
@@ -119,7 +119,7 @@ export class ModificationRoomComponent {
     onCancel() {
       const userConfirmed = window.confirm('Êtes-vous sûr de vouloir annuler ?');
       if (userConfirmed) {
-        this.router.navigate(['/admin/room']);
+        this.router.navigate(['/room']);
       }
     }
 

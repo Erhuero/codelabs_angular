@@ -2,10 +2,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { Room, getEquipmentIcon, getAccessibilityIcon } from '../../room';
-import { RoomService } from '../../room.service';
+import { RoomService } from '../services/room.service';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
 
 @Component({
@@ -15,12 +15,12 @@ import { Router } from '@angular/router';
     MatTableModule,         // Importe MatTableModule pour l'utilisation de tables Material Design.
     MatIconModule,          // Importe MatIconModule pour l'utilisation d'icônes Material Design.
     CommonModule,           // Importe CommonModule qui offre les directives Angular courantes comme ngIf, ngFor.
-    RouterModule           // Importe RouterModule pour utiliser les fonctionnalités de routage comme routerLink.
+    RouterLink         
   ],
   template: `
   <h2>Administration des salles</h2>
   
-  <button mat-fab color="primary" [routerLink]="['/admin/room/create']" class="fab-button">
+  <button mat-fab color="primary" [routerLink]="['/room/create']" class="fab-button">
       <mat-icon>add</mat-icon>
     </button>
 
@@ -99,7 +99,7 @@ export class RoomListComponent implements OnInit {
   // Méthode pour éditer une salle spécifique
   editRoom(room: Room) {
     // Navigue vers la page de modification de la salle avec l'ID de la salle
-    this.router.navigate(['/admin/room', room.id]);
+    this.router.navigate(['/room', room.id]);
   }
 
   // Méthode pour supprimer une salle spécifique

@@ -4,14 +4,17 @@ import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { loggerInterceptor } from './interceptor/logger.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes), 
+    
     provideClientHydration(), 
     provideAnimations(),
     provideHttpClient(
-      withFetch()
-    )
-  ]
+      withFetch(),
+      withInterceptors([loggerInterceptor])
+      ),
+      provideRouter(routes),
+  ],
 };

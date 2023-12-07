@@ -1,20 +1,21 @@
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import { NavbarComponent } from "./navbar/navbar.component";
-import { RoomItemComponent } from "./room-item/room-item.component";
-import { RouterModule } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
+import { authInterceptorProvider } from './auth/auth-interceptor.provider';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 @Component({
     selector: 'app-root',
     standalone: true,
+    providers: [authInterceptorProvider],
     template: `
-    <main>
-      <app-navbar></app-navbar>
-      <router-outlet></router-outlet>
-    </main>
+      <main>
+        <app-navbar></app-navbar>
+        <router-outlet></router-outlet>
+      </main>
     `,
     styleUrl: './app.component.scss',
-    imports: [CommonModule, NavbarComponent, RoomItemComponent, RouterModule], 
+    imports: [NavbarComponent, RouterOutlet], 
 })
 
 export class AppComponent {

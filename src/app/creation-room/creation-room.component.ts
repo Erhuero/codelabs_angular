@@ -5,7 +5,7 @@ import { getEquipmentIcon, getAccessibilityIcon, Equipments, Room } from '../../
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
-import { RoomService } from '../../room.service';
+import { RoomService } from '../services/room.service';
 
 export interface EquipmentWithState {
   type: Equipments;
@@ -60,7 +60,7 @@ export interface EquipmentWithState {
       </form>
     </div>
   `,
-  styleUrl: './creation-room.component.scss'
+  styleUrls: ['./creation-room.component.scss']
 })
 
 export class CreationRoomComponent {
@@ -83,7 +83,6 @@ export class CreationRoomComponent {
       private roomService: RoomService,
       private router: Router) {}
 
-
     onSubmit() {
       this.room.equipments = this.equipements
       .filter(equipment => equipment.selected)
@@ -94,7 +93,7 @@ export class CreationRoomComponent {
         next: (room) => {
           const userConfirmed = window.confirm('Enregistrement réussi ! Cliquez sur OK pour revenir a la liste des salles');
           if(userConfirmed){
-            this.router.navigate(['/admin/room']);
+            this.router.navigate(['/room']);
           }
         },
         error: (error) => {
@@ -106,7 +105,7 @@ export class CreationRoomComponent {
     onCancel() {
       const userConfirmed = window.confirm('Êtes-vous sûr de vouloir annuler ?');
       if (userConfirmed) {
-        this.router.navigate(['/admin/room']);
+        this.router.navigate(['/room']);
       }
     }
 

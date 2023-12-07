@@ -1,7 +1,8 @@
 // auth.service.ts
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
+
 // Interface définissant la structure des données de réponse attendues après la connexion
 interface LoginData {
     token: string;
@@ -21,7 +22,7 @@ export class LoginService {
           return localStorage.getItem('email') ?? 'Utilisateur';
         }
         return 'Utilisateur';
-      }      
+      }
 
     // Constructeur avec injection du service HttpClient pour effectuer des requêtes HTTP
     constructor(private http: HttpClient) { }
@@ -40,4 +41,21 @@ export class LoginService {
         );
     }
 
+    private handleError(error: HttpErrorResponse) {
+        let errorMessage = 'Un problème est survenu lors de la connexion';
+        // Traitement spécifique des erreurs ici
+        if (error.error instanceof ErrorEvent) {
+            // Erreur côté client
+            console.error('Erreur côté client:', error.error.message);
+        } else {
+            // Erreur côté serveur
+            console.error(`Code d'erreur du serveur : ${error.status}, ` + `Message: ${error.message}`);
+            errorMessage = `Erreur lors de la connexion : ${error.message}`;
+        }
+        return throwError(errorMessage);
+    }
 }
+function throwError(errorMessage: string) {
+    throw new Error('Function not implemented.');
+}
+

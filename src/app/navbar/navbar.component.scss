@@ -3,7 +3,18 @@
   }
 
   mat-toolbar {
-    background-color: #3f51b5; // Changez cette couleur selon vos besoins
-    color: white; // Changez la couleur du texte si nécessaire
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #3f51b5;
+    color: white;
+  
+    .welcome-container {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+    }
   }
+  
+  
   
