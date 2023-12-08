@@ -37,3 +37,6 @@ https://stackoverflow.com/questions/73530018/add-http-interceptor-to-standalone-
 
 https://www.angularjswiki.com/angular/cant-bind-to-ngmodel-since-it-isnt-a-known-property-of-input/
 
+Génération de pipes personnalisés
+https://angular.fr/pipes/creer-des-pipes-personnalises.html
+
