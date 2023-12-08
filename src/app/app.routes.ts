@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
+import { AuthGuard } from './auth.guard';
 
 export const routes: Routes = [
   
@@ -10,7 +11,8 @@ export const routes: Routes = [
     },
     {
         path: 'room',
-        loadChildren: () => import('../app/room/room.routes').then(routes => routes.ROOMS_ROUTES)
+        loadChildren: () => import('../app/room/room.routes').then(routes => routes.ROOMS_ROUTES),
+        canActivate: [AuthGuard]
     },
     {
         path: '',
@@ -23,5 +25,4 @@ export const routes: Routes = [
         pathMatch: 'full'
     }
 ];
-//faire du lazy loading
 
