@@ -14,8 +14,21 @@ interface LoginData {
 })
 export class LoginService {
     private apiUrl = '/api/auth/login'; // URL de l'API d'authentification
-
     token = ''; // Variable pour stocker le token JWT
+
+    // Constructeur avec injection du service HttpClient pour effectuer des requêtes HTTP
+    constructor(private http: HttpClient){
+        this.loadToken();
+    }
+
+    private loadToken(){
+        if(typeof window !== 'undefined' && window.localStorage){
+            const storedToken = localStorage.getItem('token');
+            if (storedToken){
+                this.token = storedToken;
+            }
+        }
+    }
 
     getUserName() {
         if (typeof window !== 'undefined' && window.localStorage) {
@@ -24,8 +37,6 @@ export class LoginService {
         return 'Utilisateur';
       }
 
-    // Constructeur avec injection du service HttpClient pour effectuer des requêtes HTTP
-    constructor(private http: HttpClient) { }
 
     // Méthode pour se connecter avec email et mot de passe
     login(email: string, password: string): Observable<LoginData> {
