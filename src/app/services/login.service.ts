@@ -36,7 +36,10 @@ export class LoginService {
         }
         return 'Utilisateur';
       }
-
+    
+    public getToken(): string {
+        return this.token;
+    }
 
     // Méthode pour se connecter avec email et mot de passe
     login(email: string, password: string): Observable<LoginData> {

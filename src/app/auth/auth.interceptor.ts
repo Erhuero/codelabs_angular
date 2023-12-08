@@ -1,20 +1,23 @@
-import { HttpEvent, HttpInterceptorFn, HttpRequest, HttpHandlerFn } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { HttpEvent, HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { LoginService } from '../services/login.service';
 
-export const authInterceptor: HttpInterceptorFn = 
-(req: HttpRequest<any>, next: HttpHandlerFn): Observable<HttpEvent<any>> => {
-    // Récupérer le token du stockage local
-    const token = localStorage.getItem('token');
+@Injectable()
+export class AuthInterceptor implements HttpInterceptor {
 
-    //info : intercepteur fonctionnel
+  constructor(private loginService: LoginService){}
 
-    //intercepter le token de login service
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>{
+    const token = this.loginService.getToken();
 
-    // Si le token existe, cloner la requête et ajouter le token d'authentification
-    const authReq = req.clone({
-      setHeaders: { Authorization: `Bearer ${token}` }
-    });
+    if(token){
+      const authReq = req.clone({
+        setHeaders: { Authorization: `Bearer ${token}` }
+      });
+      return next.handle(authReq);
+    }
 
-    // Passer la requête modifiée au prochain handler
-    return next(authReq);
+    return next.handle(req);
+  }
 }
