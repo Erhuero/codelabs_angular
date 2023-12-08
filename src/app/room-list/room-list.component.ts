@@ -1,5 +1,5 @@
 // room-list.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { Room, getEquipmentIcon, getAccessibilityIcon } from '../../room';
 import { RoomService } from '../services/room.service';
@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-room-list', // Définit le sélecteur personnalisé pour utiliser ce composant dans d'autres templates HTML.
@@ -78,22 +79,40 @@ import { Router } from '@angular/router';
   styleUrl: './room-list.component.scss'
 })
 
-export class RoomListComponent implements OnInit {
+export class RoomListComponent implements OnInit, OnDestroy {
+  
+  // Subscription pour suivre l'abonnement aux salles
+  private roomSubscription?: Subscription;
+
   // Définit les colonnes à afficher dans le tableau des salles
   displayedColumns: string[] = ['id', 'address', 'telephone', 'capacity', 'accessibility', 'equipments', 'actions'];
   // Stocke la liste des salles récupérées depuis l'API
   rooms: Room[] = [];
+  errorMessage: string = '';
 
   // Injecte RoomService pour la gestion des salles et Router pour la navigation
   constructor(private roomService: RoomService, private router: Router) {}
 
   // Charge les salles au démarrage du composant
   ngOnInit() {
-    // Appelle getRooms de RoomService et met à jour la liste des salles
-    this.roomService.getRooms().subscribe(
-      rooms => this.rooms = rooms, // Stocke les salles dans la variable rooms
-      error => console.error(error)  // Affiche les erreurs en console
-    );
+    //une propriété de classe qui est utilisée pour stocker la souscription à un observable. Cela permet de garder une référence à 
+    //l'abonnement pour pouvoir se désabonner ultérieurement et éviter les fuites de mémoire.
+    this.roomSubscription = this.roomService.getRooms().subscribe({
+      //définit une fonction qui sera exécutée à chaque fois que l'observable émet de nouvelles données, affectant ces données à la propriété rooms du composant.
+      next: rooms => this.rooms = rooms,
+      //gérer les erreurs 
+      error: (error) => {
+        // Affiche un message d'erreur à l'utilisateur
+        // Par exemple, mettre à jour une propriété `errorMessage` qui est affichée dans le template
+        this.errorMessage = "Une erreur est survenue lors du chargement des salles.";
+      }
+    });
+  }
+
+  // Nettoie l'abonnement lors de la destruction du composant
+  ngOnDestroy() {
+    // Désabonne de roomSubscription pour éviter les fuites de mémoire
+    this.roomSubscription?.unsubscribe();
   }
 
   // Méthode pour éditer une salle spécifique

@@ -40,3 +40,5 @@ https://www.angularjswiki.com/angular/cant-bind-to-ngmodel-since-it-isnt-a-known
 Génération de pipes personnalisés
 https://angular.fr/pipes/creer-des-pipes-personnalises.html
 
+https://rxjs.dev/deprecations/subscribe-arguments
+
