@@ -115,26 +115,28 @@ export class RoomListComponent implements OnInit, OnDestroy {
     this.roomSubscription?.unsubscribe();
   }
 
-  // Méthode pour éditer une salle spécifique
+  // Méthode pour éditer une salle spécifiquet
   editRoom(room: Room) {
     // Navigue vers la page de modification de la salle avec l'ID de la salle
     this.router.navigate(['/room', room.id]);
   }
 
   // Méthode pour supprimer une salle spécifique
-  async deleteRoom(id: number) {
+  //inutile d'utiliser async/await dans cette methode car on travaille avec des observables RxJS
+  //async/await est plus destinée aux promises
+  deleteRoom(id: number) {
     // Demande une confirmation avant la suppression
     if (confirm('Êtes-vous sûr de vouloir supprimer cette salle ?')) {
       // Appelle deleteRoom de RoomService pour supprimer la salle
-      this.roomService.deleteRoom(id).subscribe(async () => {
+      this.roomService.deleteRoom(id).subscribe(() => {
         // Recharge la liste des salles après la suppression
-        (await this.roomService.getRooms()).subscribe(rooms => {
+        this.roomService.getRooms().subscribe(rooms => {
           this.rooms = rooms; // Met à jour la liste des salles
         });
       });
     }
   }
-  
+
   // Méthodes pour obtenir les icônes d'équipement et d'accessibilité
   getEquipmentIcon = getEquipmentIcon;
   getAccessibilityIcon = getAccessibilityIcon;
