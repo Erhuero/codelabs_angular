@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Equipments, Room, getAccessibilityIcon, getEquipmentIcon } from '../../room';
 import { EquipmentWithState } from '../creation-room/creation-room.component';
@@ -58,6 +58,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 })
 export class ModificationRoomComponent {
 
+ 
+
   room: Omit<Room, 'id'> = { // 'Omit' exclut 'id' de l'interface 'Room'
     address: '',
     capacity: '',
@@ -73,44 +75,33 @@ export class ModificationRoomComponent {
     accessibility = true; 
 
     constructor(
+      private route: ActivatedRoute,
       private roomService: RoomService,
       private router: Router,
-      private route: ActivatedRoute // Injectez ActivatedRoute
     ) {}
-  
+
+    @Input({required: true}) roomId!: number;
+
     ngOnInit() {
-      // Récupère la valeur de 'id' depuis l'URL comme un string
-      const roomIdParam = this.route.snapshot.paramMap.get('id');
-    
-      // Convertit la valeur de 'id' en nombre. Si 'id' n'est pas un nombre, roomId sera NaN
-      const roomId = Number(roomIdParam);
-    
-      // Vérifie si roomId est un nombre et non NaN, et si roomIdParam n'est pas null
-      if (!isNaN(roomId) && roomIdParam) {
-        // Si roomId est valide, appelle le service pour obtenir les détails de la salle
-        this.roomService.getRoomById(roomId).subscribe(
-          room => {
-            // Assignation de la salle récupérée à la variable locale
-            this.room = room; 
-    
-            // Boucle sur les équipements de la salle et les coche si présents dans la liste
-            this.room.equipments.forEach((equipmentName) => {
-              // Trouve l'équipement correspondant dans la liste des équipements disponibles
-              const equipment = this.equipements.find(e => Equipments[e.type] === equipmentName);
-              if (equipment) {
-                // Coche l'équipement comme sélectionné
-                equipment.selected = true;
-              }
-            });
-          },
-          error => console.error(error) // Gestion des erreurs lors de l'appel au service
-        );
-      } else {
-        // Gère le cas où roomId n'est pas un nombre valide, par exemple afficher une erreur
-        console.error('Invalid room ID:', roomIdParam);
-      }
+      console.log(this.roomId);
+      
+          if (!isNaN(this.roomId)) {
+            this.roomService.getRoomById(this.roomId).subscribe(
+              room => {
+                this.room = room;
+                this.room.equipments.forEach((equipmentName) => {
+                  const equipment = this.equipements.find(e => Equipments[e.type] === equipmentName);
+                  if (equipment) {
+                    equipment.selected = true;
+                  }
+                });
+              },
+              error => console.error(error)
+            );
+          } else {
+            console.error('ID de la salle non numérique:', this.roomId);
+          }
     }
-    
 
     onSubmit() {
       this.room.equipments = this.equipements

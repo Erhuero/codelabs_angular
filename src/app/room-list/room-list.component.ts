@@ -49,14 +49,17 @@ import { Subscription } from 'rxjs';
       <ng-container matColumnDef="accessibility">
         <th mat-header-cell *matHeaderCellDef class="action-cell"> Accessibilité </th>
           <td mat-cell *matCellDef="let room">
-            <mat-icon *ngIf="room.accessibility">{{ getAccessibilityIcon(room.accessibility) }}</mat-icon>
+          @if (room.accessibility) {}
+            <mat-icon>{{ getAccessibilityIcon(room.accessibility) }}</mat-icon>
           </td>
       </ng-container>
 
       <ng-container matColumnDef="equipments">
       <th mat-header-cell *matHeaderCellDef class="action-cell"> Équipements </th>
         <td mat-cell *matCellDef="let room">
-          <mat-icon *ngFor="let equipment of room.equipments">{{ getEquipmentIcon(equipment) }}</mat-icon>
+        @for (equipment of room.equipments; track $index) { 
+          <mat-icon >{{ getEquipmentIcon(equipment) }}</mat-icon>
+        }
         </td>
       </ng-container>
 

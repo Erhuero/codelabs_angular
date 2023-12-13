@@ -3,7 +3,6 @@ import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './auth.guard';
 
 export const routes: Routes = [
-  
     {
         path: 'login',
         component: LoginComponent,

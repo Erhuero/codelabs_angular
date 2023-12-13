@@ -1,5 +1,5 @@
 import { ApplicationConfig } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
@@ -8,13 +8,12 @@ import { loggerInterceptor } from './interceptor/logger.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    
     provideClientHydration(), 
     provideAnimations(),
     provideHttpClient(
       withFetch(),
       withInterceptors([loggerInterceptor])
       ),
-      provideRouter(routes),
+      provideRouter(routes, withComponentInputBinding()),
   ],
 };
