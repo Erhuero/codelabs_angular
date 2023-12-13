@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, map } from 'rxjs';
 import { Room } from '../../room';
 import { HttpClient } from '@angular/common/http';
-import { GestionErreurPipe } from '../pipe/gestion-erreur.pipe';
+import { GestionErreurPipe } from '../pipes/gestion-erreur.pipe';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +12,7 @@ export class RoomService {
   private gestionErreurPipe = new GestionErreurPipe();
 
   private apiUrl = '/api/rooms';
+  erreurHandlePipe: any;
   
   constructor(private http: HttpClient) {}
 
@@ -35,7 +36,7 @@ export class RoomService {
   // Supprime une salle
   deleteRoom(id: number): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}`)
-    .pipe(map(() => ({ message: 'Salle supprimée avec succès.' })),catchError(this.gestionErreurPipe.transform)
+    .pipe(map(() => ({ message: 'Salle supprimée avec succès.' })),catchError(this.erreurHandlePipe.transform)
       );
   }
 }

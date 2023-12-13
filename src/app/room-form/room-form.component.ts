@@ -1,19 +1,23 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Equipments, Room, getAccessibilityIcon, getEquipmentIcon } from '../../room';
-import { EquipmentWithState } from '../creation-room/creation-room.component';
 import { RoomService } from '../services/room.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+export interface EquipmentWithState {
+  type: Equipments;
+  selected: boolean;
+}
+
 @Component({
-  selector: 'app-modification-room',
+  selector: 'app-room-form',
   standalone: true,
   imports: [CommonModule, MatIconModule, FormsModule, ReactiveFormsModule],
   template: `
-    <div class="creation-room-container">
-      <h2>Modifier la salle</h2>
+    <div class="room-form-container">
+      <h2>{{ isEditMode ? 'Modifier la salle' : 'Créer une nouvelle salle' }}</h2>
       <form (ngSubmit)="onSubmit()">
         <div class="form-field">
           <label for="address">Adresse</label>
@@ -54,87 +58,92 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
       </form>
     </div>
   `,
-  styleUrl: './modification-room.component.scss'
+  styleUrls: ['./room-form.component.scss']
 })
-export class ModificationRoomComponent {
-
- 
-
-  room: Omit<Room, 'id'> = { // 'Omit' exclut 'id' de l'interface 'Room'
+export class RoomFormComponent {
+  room: Omit<Room, 'id'> = {
     address: '',
     capacity: '',
     telephone: '',
     accessibility: false,
     equipments: [],
   };
+  equipements: EquipmentWithState[] = [
+    { type: Equipments.TABLE, selected: false },
+    { type: Equipments.VISIO, selected: false }
+  ];
+  isEditMode: boolean = false;
 
-    equipements: EquipmentWithState[] = [
-      { type: Equipments.TABLE, selected: false },
-      { type: Equipments.VISIO, selected: false }
-    ];
-    accessibility = true; 
+  constructor(
+    private route: ActivatedRoute,
+    private roomService: RoomService,
+    private router: Router
+  ) {}
 
-    constructor(
-      private route: ActivatedRoute,
-      private roomService: RoomService,
-      private router: Router,
-    ) {}
+  @Input() roomId?: number;
 
-    @Input({required: true}) roomId!: number;
+  ngOnInit() {
+    console.log(this.roomId);
+    if (this.roomId != null && !isNaN(this.roomId)) {
+      this.isEditMode = true;
+      this.roomService.getRoomById(this.roomId).subscribe(
+        room => {
+          this.room = room;
+          this.room.equipments.forEach((equipmentName) => {
+            const equipment = this.equipements.find(e => Equipments[e.type] === equipmentName);
+            if (equipment) {
+              equipment.selected = true;
+            }
+          });
+        },
+        error => console.error(error)
+      );
+    } else {
+      this.isEditMode = false;
+      console.log('Mode création, aucun ID de salle fourni.');
 
-    ngOnInit() {
-      console.log(this.roomId);
-      
-          if (!isNaN(this.roomId)) {
-            this.roomService.getRoomById(this.roomId).subscribe(
-              room => {
-                this.room = room;
-                this.room.equipments.forEach((equipmentName) => {
-                  const equipment = this.equipements.find(e => Equipments[e.type] === equipmentName);
-                  if (equipment) {
-                    equipment.selected = true;
-                  }
-                });
-              },
-              error => console.error(error)
-            );
-          } else {
-            console.error('ID de la salle non numérique:', this.roomId);
-          }
     }
+  }
 
-    onSubmit() {
-      this.room.equipments = this.equipements
+  onSubmit() {
+    this.room.equipments = this.equipements
       .filter(equipment => equipment.selected)
       .map(equipment => Equipments[equipment.type]);
-  
-      // Appel à RoomService pour enregistrer la salle
+
+    if (this.isEditMode) {
       this.roomService.modifyRoom(this.room as Room).subscribe({
-        next: (room) => {
-          const userConfirmed = window.confirm('Modification réussie ! Cliquez sur OK pour revenir a la liste des salles');
-          if(userConfirmed){
-            this.router.navigate(['/room']);
-          }
-        },
-        error: (error) => {
-          window.alert('Echec de l\'envoi :' + error);
-        }
+        next: () => this.handleSuccess(),
+        error: (error) => this.handleError(error)
+      });
+    } else {
+      this.roomService.addRoom(this.room as Room).subscribe({
+        next: () => this.handleSuccess(),
+        error: (error) => this.handleError(error)
       });
     }
+  }
 
-    onCancel() {
-      const userConfirmed = window.confirm('Êtes-vous sûr de vouloir annuler ?');
-      if (userConfirmed) {
-        this.router.navigate(['/room']);
-      }
+  handleSuccess() {
+    const message = this.isEditMode ? 'Modification réussie !' : 'Enregistrement réussi !';
+    const userConfirmed = window.confirm(`${message} Cliquez sur OK pour revenir à la liste des salles.`);
+    if (userConfirmed) {
+      this.router.navigate(['/room']);
     }
+  }
 
-    getEquipmentIcon = getEquipmentIcon;
-    getAccessibilityIcon = getAccessibilityIcon;
-
-    getIcon(equipment: Equipments): string {
-      // Utilisez la fonction existante getEquipmentIcon avec la conversion nécessaire
-      return getEquipmentIcon(Equipments[equipment]);
+  onCancel() {
+    const userConfirmed = window.confirm('Êtes-vous sûr de vouloir annuler ?');
+    if (userConfirmed) {
+      this.router.navigate(['/room']);
     }
+  }
 
+  handleError(error: any) {
+    window.alert('Échec de l\'opération: ' + error);
+  }
+
+  getIcon(equipment: Equipments): string {
+    // Utilisez la fonction existante getEquipmentIcon avec la conversion nécessaire
+    return getEquipmentIcon(Equipments[equipment]);
+  }
 }

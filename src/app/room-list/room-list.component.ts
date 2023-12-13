@@ -49,17 +49,18 @@ import { Subscription } from 'rxjs';
       <ng-container matColumnDef="accessibility">
         <th mat-header-cell *matHeaderCellDef class="action-cell"> Accessibilité </th>
           <td mat-cell *matCellDef="let room">
-          @if (room.accessibility) {}
-            <mat-icon>{{ getAccessibilityIcon(room.accessibility) }}</mat-icon>
+            @if (room.accessibility) {
+              <mat-icon>{{ getAccessibilityIcon(room.accessibility) }}</mat-icon>
+            }
           </td>
       </ng-container>
 
       <ng-container matColumnDef="equipments">
       <th mat-header-cell *matHeaderCellDef class="action-cell"> Équipements </th>
         <td mat-cell *matCellDef="let room">
-        @for (equipment of room.equipments; track $index) { 
-          <mat-icon >{{ getEquipmentIcon(equipment) }}</mat-icon>
-        }
+          @for (equipment of room.equipments; track $index) { 
+            <mat-icon >{{ getEquipmentIcon(equipment) }}</mat-icon>
+          }
         </td>
       </ng-container>
 
@@ -67,7 +68,7 @@ import { Subscription } from 'rxjs';
       <th mat-header-cell *matHeaderCellDef> Actions </th>
         <td mat-cell *matCellDef="let room" class="action-cell">
           <button mat-icon-button (click)="editRoom(room)" style="margin-right: 8px;">
-            <mat-icon>edit</mat-icon> 
+            <mat-icon>edit</mat-icon>
           </button>
           <button mat-icon-button (click)="deleteRoom(room.id)">
             <mat-icon>delete</mat-icon>

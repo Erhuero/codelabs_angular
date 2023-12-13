@@ -8,12 +8,9 @@ import { loggerInterceptor } from './interceptor/logger.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideClientHydration(), 
+    provideClientHydration(),
     provideAnimations(),
-    provideHttpClient(
-      withFetch(),
-      withInterceptors([loggerInterceptor])
-      ),
-      provideRouter(routes, withComponentInputBinding()),
+    provideHttpClient(withFetch(), withInterceptors([loggerInterceptor])),
+    provideRouter(routes, withComponentInputBinding()),
   ],
 };
