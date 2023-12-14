@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { NavbarComponent } from "./navbar/navbar.component";
+import { NavbarComponent } from "../navbar/navbar.component";
 import { RouterOutlet } from '@angular/router';
-import { authInterceptorProvider } from './auth/auth-interceptor.provider';
+import { authInterceptorProvider } from '../auth/auth-interceptor.provider';
 
 @Component({
     selector: 'app-root',
