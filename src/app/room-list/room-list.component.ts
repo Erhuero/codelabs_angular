@@ -42,7 +42,7 @@ import { Subscription } from 'rxjs';
       </ng-container>
 
      <ng-container matColumnDef="capacity">
-        <th mat-header-cell *matHeaderCellDef class="action-cell"> Capacité  </th>
+        <th mat-header-cell *matHeaderCellDef class="action-cell"> Capacité </th>
         <td mat-cell *matCellDef="let room">{{ room.capacity }}</td>
       </ng-container>
 

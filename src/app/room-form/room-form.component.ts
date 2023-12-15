@@ -4,7 +4,7 @@ import { Equipments, Room, getAccessibilityIcon, getEquipmentIcon } from '../../
 import { RoomService } from '../services/room.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 export interface EquipmentWithState {
   type: Equipments;
@@ -61,6 +61,8 @@ export interface EquipmentWithState {
   styleUrls: ['./room-form.component.scss']
 })
 export class RoomFormComponent {
+
+  
   room: Omit<Room, 'id'> = {
     address: '',
     capacity: '',
@@ -73,6 +75,7 @@ export class RoomFormComponent {
     { type: Equipments.VISIO, selected: false }
   ];
   isEditMode: boolean = false;
+  roomForm: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -84,6 +87,7 @@ export class RoomFormComponent {
 
   ngOnInit() {
     console.log(this.roomId);
+    
     if (this.roomId != null && !isNaN(this.roomId)) {
       this.isEditMode = true;
       this.roomService.getRoomById(this.roomId).subscribe(
@@ -101,7 +105,6 @@ export class RoomFormComponent {
     } else {
       this.isEditMode = false;
       console.log('Mode création, aucun ID de salle fourni.');
-
     }
   }
 
